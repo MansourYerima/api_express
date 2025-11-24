@@ -9,8 +9,20 @@ const port = 3000;
 
 const prisma = new PrismaClient()
 
-app.post('/login', (req, res) => {
-    res.send("Login Called");
+app.post('/login', async (req, res) => {
+    const {email, password} = req.body;
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+        password: password
+      }
+    })
+
+    if(user){
+      return res.status(200).json(user);
+    }
+    return res.status(404).json({ error: "Utilisateur introuvable" });
+
 });
 
 app.post('/register', async (req, res) => {
