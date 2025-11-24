@@ -32,13 +32,42 @@ app.get("/users", async (req, res) => {
   res.status(200).json(users);
 });
 
-app.get("/users/:id", (req, res) => {
+app.get("/users/:id", async (req, res) => {
     const id = req.params.id
-    res.send(`Get user Called with ID ${id}`);
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.status(200).json(user);
 });
-app.delete("/users/:id", (req, res) => {
+
+app.put("/users/:id", async (req, res) => {
   const id = req.params.id;
-  res.send(`Delete user Called with ID ${id}`);
+  const { name, contact, email, password } = req.body;
+  const user = await prisma.user.update({
+    where: {
+      id: parseInt(id),
+    },
+    data: {
+      name: name,
+      contact: contact,
+      email: email,
+      password: password,
+    },
+  });
+  res.status(200).json(user);
+});
+
+
+app.delete("/users/:id", async (req, res) => {
+  const id = req.params.id;
+  const user = await prisma.user.delete({
+    where: {
+      id : parseInt(id),
+    }
+  })
+  res.status(200).send(`Delete user Called with ID ${id}`);
 });
 
 app.listen(port, () => {
