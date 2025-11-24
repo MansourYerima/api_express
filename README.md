@@ -2,7 +2,7 @@
 
 # A faire:
 
-### Dupliquer le .env.exemple
+### Dupliquer le .env.exemple en .env
 
 ### Lancer: 
 
